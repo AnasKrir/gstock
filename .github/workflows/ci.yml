@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  # tu peux aussi déclencher manuellement
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-trigger-render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make mvnw executable (just in case)
+        run: chmod +x mvnw
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Build & test
+        run: ./mvnw -ntp -DskipTests=false verify
+
+      - name: Trigger Render deploy (Deploy Hook)
+        if: ${{ success() }}
+        run: curl -fsSL -X POST "$RENDER_HOOK"
+        env:
+          RENDER_HOOK: ${{ secrets.RENDER_HOOK }}
