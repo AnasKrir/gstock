@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle commande - GStock</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/commandes.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/admin}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" class="logo" alt="Logo">
+            <span class="app-name">GStock</span>
+        </a>
+        <nav class="nav-links">
+            <a th:href="@{/admin/produits}" class="nav-link">📦 Produits</a>
+            <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+            <a th:href="@{/admin/commandes}" class="nav-link" style="text-decoration: underline;">🛒 Commandes</a>
+            <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+            <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <div class="session-toggle">👤 <span sec:authentication="name">[USER]</span></div>
+    </div>
+</header>
+
+<main class="main-content">
+    <h2>Créer une commande</h2>
+
+    <!-- Alerts -->
+    <div th:if="${error} or ${success}" class="flash">
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    </div>
+
+    <form class="card form" th:action="@{/admin/commandes}" method="post" id="commandeForm">
+        <div class="grid2">
+            <label>Client
+                <select name="clientId" required>
+                    <option value="" disabled selected>-- Sélectionner --</option>
+                    <option th:each="cl : ${clients}" th:value="${cl.id}" th:text="${cl.nom}">Client</option>
+                </select>
+            </label>
+
+            <label>Vendeur
+                <select name="vendeurId" required>
+                    <option value="" disabled selected>-- Sélectionner --</option>
+                    <option th:each="v : ${vendeurs}" th:value="${v.id}" th:text="${v.username}">vendeur</option>
+                </select>
+            </label>
+        </div>
+
+        <h3>Lignes</h3>
+        <div id="lignes"></div>
+
+        <div class="line">
+            <button class="btn" type="button" id="addLine">➕ Ajouter une ligne</button>
+            <button class="btn primary" type="submit">💾 Enregistrer</button>
+            <a class="btn" th:href="@{/admin/commandes}">↩️ Retour</a>
+        </div>
+    </form>
+</main>
+
+<footer class="footer"><span>© GStock 2025</span></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+      // sera rendu en JS : [{id:1,nom:"X",stockDisponible:10}, ...]
+      const produits = /*[[${produits}]]*/ [];
+      const cont = document.getElementById('lignes');
+
+      function newRow() {
+        const wrap = document.createElement('div');
+        wrap.className = 'row';
+        wrap.innerHTML = `
+          <select name="productIds[]" required>
+            <option value="" disabled selected>-- Produit --</option>
+            ${produits.map(p => `<option value="${p.id}">${p.nom} (Stock:${p.stockDisponible})</option>`).join('')}
+          </select>
+          <input type="number" name="quantites[]" min="1" value="1" required>
+          <button type="button" class="btn danger remove">✖</button>
+        `;
+        wrap.querySelector('.remove').onclick = () => wrap.remove();
+        cont.appendChild(wrap);
+      }
+
+      document.getElementById('addLine').onclick = newRow;
+      newRow(); // 1 ligne par défaut
+    /*]]>*/
+</script>
+</body>
+</html>

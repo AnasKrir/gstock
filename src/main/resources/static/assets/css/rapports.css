@@ -1,0 +1,18 @@
+.cards{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; width:90%; }
+.kpi{ flex:1 1 200px; min-width:220px; padding:26px; border-radius:16px; color:#fff; text-align:center;
+     box-shadow:0 10px 20px rgba(0,0,0,.08); }
+.kpi.blue{ background:#2196F3; }
+.kpi.green{ background:#4CAF50; }
+.kpi.red{ background:#F44336; }
+.kpi.orange{ background:#FF9800; }
+.grid2.full{ width:90%; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.panel{ background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 20px rgba(0,0,0,.06); }
+.table{ width:100%; border-collapse:collapse; }
+.table th,.table td{ border:1px solid #ddd; padding:8px; text-align:center; }
+.table thead{ background:#cee9e9; }
+
+/* Titres */
+.main-content h2 {
+    color: #006b7c;
+    margin-bottom: 0;
+}

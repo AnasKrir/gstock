@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Erreur d'authentification</title>
+    <link rel="stylesheet" th:href="@{/assets/css/error.css}">
+</head>
+<body>
+    <div class="error-container">
+        <img th:src="@{/assets/img/error.gif}" alt="Erreur" class="error-gif">
+        <h2>Échec de l'authentification</h2>
+        <p>Nom d'utilisateur ou mot de passe incorrect.</p>
+        <a th:href="@{/login}" class="back-link">← Retour à la page de connexion</a>
+
+        <!-- Audio player (hidden) -->
+        <audio id="errorSound" autoplay hidden>
+            <source th:src="@{/assets/audio/error.mp3}" type="audio/mpeg">
+            Votre navigateur ne supporte pas l’audio.
+        </audio>
+    </div>
+</body>
+</html>

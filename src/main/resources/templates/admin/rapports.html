@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapports - GStock</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/rapports.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/admin}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" class="logo" alt="Logo">
+            <span class="app-name">GStock</span>
+        </a>
+        <nav class="nav-links">
+            <a th:href="@{/admin/produits}" class="nav-link">📦 Produits</a>
+            <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+            <a th:href="@{/admin/commandes}" class="nav-link">🛒 Commandes</a>
+            <a th:href="@{/admin/rapports}" class="nav-link" style="text-decoration: underline;">📑 Rapports</a>
+            <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <div class="session-dropdown" id="sessionDropdown">
+            <div class="session-toggle" id="sessionToggle">
+                👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span>:
+                <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+            </div>
+            <div class="session-menu" id="sessionMenu">
+                <a th:href="@{/profil}" class="profil-button">
+                    <img th:src="@{/assets/img/admin.png}" alt="Profil" class="profile-icon">
+                    Mon profil
+                </a>
+                <a th:href="@{/logout}" class="logout-button">
+                    <img th:src="@{/assets/img/logout.png}" alt="Déconnexion" class="logout-icon">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <h2>Rapports</h2>
+
+    <div class="cards">
+        <div class="kpi blue">Total commandes <h3 th:text="${totalCommandes}">0</h3></div>
+        <div class="kpi green">Validées <h3 th:text="${commandesValidees}">0</h3></div>
+        <div class="kpi red">Annulées <h3 th:text="${commandesAnnulees}">0</h3></div>
+        <div class="kpi orange">Ventes du jour
+            <h3>
+        <span th:if="${ventesDuJour!=null}"
+              th:text="${#numbers.formatDecimal(ventesDuJour,1,'COMMA',2,'POINT')} + ' DH'">0.00 DH</span>
+                <span th:unless="${ventesDuJour!=null}">0.00 DH</span>
+            </h3>
+        </div>
+    </div>
+
+    <div class="grid2 full">
+        <div class="panel">
+            <h3>Revenus par mois (année courante)</h3>
+            <table class="table">
+                <thead><tr><th>Mois</th><th>Montant</th></tr></thead>
+                <tbody>
+                <tr th:each="e : ${revenusParMois}">
+                    <td th:text="${e.key}">Jan</td>
+                    <td th:text="${#numbers.formatDecimal(e.value,1,'COMMA',2,'POINT')} + ' DH'">0.00</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel">
+            <h3>Top produits vendus</h3>
+            <table class="table">
+                <thead><tr><th>Produit</th><th>Quantité</th></tr></thead>
+                <tbody>
+                <tr th:each="t : ${topProduits}">
+                    <td th:text="${t[0]}">Nom</td>
+                    <td th:text="${t[1]}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer class="footer"><span>© GStock 2025</span></footer>
+
+<script>
+    const dropdown = document.getElementById('sessionDropdown');
+    const menu = document.getElementById('sessionMenu');
+    let timeout;
+
+    dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(timeout);
+        menu.classList.add('show');
+        menu.style.display = 'flex';
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+            menu.classList.remove('show');
+            menu.style.display = 'none';
+        }, 300);
+    });
+</script>
+
+</body>
+</html>

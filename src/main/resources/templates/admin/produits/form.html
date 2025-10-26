@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${produit != null} ? 'Modifier produit' : 'Nouveau produit'">Produit</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/produits.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/admin}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" class="logo" alt="Logo">
+            <span class="app-name">GStock</span>
+        </a>
+        <nav class="nav-links">
+            <a th:href="@{/admin/produits}" class="nav-link" style="text-decoration: underline;">📦 Produits</a>
+            <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+            <a th:href="@{/admin/commandes}" class="nav-link">🛒 Commandes</a>
+            <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+            <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main-content">
+    <h2 th:text="${produit != null} ? 'Modifier le produit #' + ${produit.id} : 'Créer un produit'">Produit</h2>
+
+    <form class="card form" th:action="@{/admin/produits/save}" method="post">
+        <input type="hidden" name="id" th:value="${produit!=null}? ${produit.id} : ''">
+        <div class="grid2">
+            <label>Nom
+                <input type="text" name="nom" th:value="${produit!=null}? ${produit.nom} : ''" required>
+            </label>
+            <label>Catégorie
+                <select name="categorie" required>
+                    <option value="" disabled th:if="${produit==null}" selected>-- Sélectionner --</option>
+                    <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"
+                            th:selected="${produit!=null and produit.categorie==c}"></option>
+                </select>
+            </label>
+            <label>Prix (DH)
+                <input type="number" step="0.01" min="0" name="prix" th:value="${produit!=null}? ${produit.prix} : ''" required>
+            </label>
+            <label>Stock disponible
+                <input type="number" min="0" name="stockDisponible" th:value="${produit!=null}? ${produit.stockDisponible} : 0" required>
+            </label>
+            <label>Seuil alerte
+                <input type="number" min="0" name="seuilAlerte" th:value="${produit!=null}? ${produit.seuilAlerte} : 10" required>
+            </label>
+        </div>
+
+        <div class="line">
+            <button class="btn primary" type="submit">💾 Enregistrer</button>
+            <a class="btn ghost" th:href="@{/admin/produits}">↩️ Retour</a>
+        </div>
+    </form>
+</main>
+
+<footer class="footer"><span>© GStock 2025</span></footer>
+</body>
+</html>

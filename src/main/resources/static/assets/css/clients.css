@@ -1,0 +1,249 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f5fcfd;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zone principale */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    gap: 30px;
+    height: calc(100vh - 130px); /* Ajusté pour navbar + footer */
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Titres */
+.main-content h2 {
+    color: #006b7c;
+    margin-bottom: 0;
+}
+
+/* Tableau */
+table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 14px 18px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+thead {
+    background-color: #cee9e9;
+    color: #004d4d;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2fdfd;
+}
+
+/* Icônes d'action */
+a {
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 18px;
+    transition: transform 0.2s ease-in-out;
+}
+
+a:hover {
+    transform: scale(1);
+}
+
+a:active {
+    transform: scale(1);
+}
+
+/* Formulaire */
+form {
+    width: 100%;
+    max-width: 500px;
+    background-color: #eefcfc;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: auto;
+}
+
+form input,
+form select,
+form button {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #b2d8d8;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Bouton principal */
+form button {
+    background-color: #22BBD1;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+form button:hover {
+    background-color: #1aa8be;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Bouton retour à l'ajout */
+form + div a,
+form + .add-button a {
+    background-color: white;
+    padding: 8px 20px;
+    font-weight: bold;
+    color: #006b7c;
+    border: 2px solid #006b7c;
+    border-radius: 10px;
+    display: inline-block;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+form + div a:hover {
+    background-color: #006b7c;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* === Icônes d'actions côte à côte dans le tableau === */
+.main-content table tbody tr td:last-child{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;           /* espace entre ✏️ et 🗑️ */
+  white-space: nowrap; /* évite les retours à la ligne */
+}
+
+/* Neutraliser le style global des <form> à l'intérieur du tableau */
+.main-content table tbody tr td:last-child form{
+  width: auto;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: inline-flex; /* garde le form sur la même ligne que le lien */
+}
+
+/* Style des deux actions (lien ✏️ et bouton 🗑️) */
+.main-content table tbody tr td:last-child a,
+.main-content table tbody tr td:last-child button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1.5px solid #cfe9ec;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Effet hover */
+.main-content table tbody tr td:last-child a:hover { background:#22BBD1; color:#fff; }
+.main-content table tbody tr td:last-child button:hover{ background:#e57373; color:#fff;}
+
+/* Couleurs (optionnel) */
+.main-content table tbody tr td:last-child a{      border-color:#22BBD1; } /* ✏️ */
+.main-content table tbody tr td:last-child button{ border-color:#e57373; } /* 🗑️ */
+
+/* --- Alerts --- */
+:root{
+  --alert-radius: 10px;
+  --alert-padding: 12px 16px;
+  --alert-shadow: 0 6px 16px rgba(0,0,0,.06);
+
+  --success-bg: #ecfdf5;   /* vert très clair */
+  --success-bd: #10b981;   /* vert émeraude */
+  --success-tx: #065f46;   /* vert foncé */
+
+  --danger-bg: #fef2f2;    /* rouge très clair */
+  --danger-bd: #ef4444;    /* rouge vif */
+  --danger-tx: #7f1d1d;    /* rouge foncé */
+}
+
+.flash{
+  margin: 16px 0;
+  display: grid;
+  gap: 10px;
+}
+
+.alert{
+  position: relative;
+  padding: var(--alert-padding);
+  border: 1px solid transparent;
+  border-radius: var(--alert-radius);
+  box-shadow: var(--alert-shadow);
+  font-size: .95rem;
+  line-height: 1.4;
+  animation: slide-in .25s ease-out;
+}
+
+/* Succès */
+.alert-success{
+  background: var(--success-bg);
+  border-color: var(--success-bd);
+  color: var(--success-tx);
+}
+.alert-success::before{
+  content: "✔";
+  font-weight: 700;
+  margin-right: .5rem;
+}
+
+/* Erreur */
+.alert-danger{
+  background: var(--danger-bg);
+  border-color: var(--danger-bd);
+  color: var(--danger-tx);
+}
+.alert-danger::before{
+  content: "⚠";
+  font-weight: 700;
+  margin-right: .5rem;
+}
+
+/* Accessoires */
+.alert a{
+  text-decoration: underline;
+  font-weight: 600;
+}
+.alert + .alert{
+  margin-top: 6px;
+}
+
+/* Petite entrée animée */
+@keyframes slide-in{
+  from{ transform: translateY(-6px); opacity: 0; }
+  to{ transform: translateY(0); opacity: 1; }
+}

@@ -1,0 +1,114 @@
+/* ---- Page profil : layout plein écran + cartes ---- */
+body{
+  margin:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #d2f1f0, #f0fcfc);
+  min-height:100vh;
+  display:flex;               /* header + main + footer empilés */
+  flex-direction:column;
+  color:#004d4d;
+}
+
+/* S’assure que navbar et footer prennent 100% */
+.navbar, .footer{ width:97%; }
+
+.main-content{
+  flex:1;                     /* occupe tout l’espace entre navbar et footer */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  padding:40px 20px;
+}
+
+.main-content h2{
+  margin:0;
+  color:#006b7c;
+}
+
+/* conteneur central */
+.profile-wrap{
+  width:100%;
+  max-width:820px;
+  display:grid;
+  gap:18px;
+}
+
+/* cartes */
+.profile-card,
+.password-card{
+  background:#fff;
+  border-radius:14px;
+  padding:22px;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.profile-card p{
+  margin:6px 0;
+  font-size:16px;
+}
+.profile-card b{ color:#006b7c; }
+
+.password-card h3{
+  margin:0 0 12px;
+  color:#006b7c;
+}
+
+/* messages */
+.ok, .err{
+  margin:0 0 10px;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:.95rem;
+  border:1px solid transparent;
+}
+.ok  { background:#ecfdf5; color:#065f46; border-color:#10b981; }
+.err { background:#fef2f2; color:#7f1d1d; border-color:#ef4444; }
+
+/* formulaire de changement de mot de passe */
+.password-card form{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr auto; /* 3 inputs + bouton */
+  gap:12px;
+  align-items:center;
+}
+
+.password-card input{
+  padding:12px;
+  border:1px solid #b2d8d8;
+  border-radius:10px;
+  font-size:15px;
+  background:#fff;
+}
+.password-card input:focus{
+  outline:none;
+  border-color:#22BBD1;
+  box-shadow:0 0 0 3px rgba(34,187,209,.15);
+}
+
+.password-card button{
+  background:#22BBD1;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s ease;
+  white-space:nowrap;
+}
+.password-card button:hover{
+  background:#1aa8be;
+  transform:translateY(-1px);
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+/* responsive */
+@media (max-width: 820px){
+  .password-card form{
+    grid-template-columns: 1fr; /* empile tout */
+  }
+  .password-card button{
+    width:100%;
+  }
+}

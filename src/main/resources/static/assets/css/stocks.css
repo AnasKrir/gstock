@@ -1,0 +1,189 @@
+/* ====== STYLES DÉDIÉS À LA PAGE STOCKS ====== */
+
+/* Scope page */
+.stocks-page { gap: 26px; }
+
+/* Table identique au reste de l’app, avec quelques ajustements */
+.stocks-page table{
+  width: 100%;
+  max-width: 1100px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+.stocks-page thead th{
+  background: #cee9e9;
+  color: #004d4d;
+  font-weight: 700;
+  padding: 14px 16px;
+}
+.stocks-page td{
+  padding: 14px 16px;
+  border: 1px solid #e2ecec;
+  text-align: center;
+}
+.stocks-page tbody tr:nth-child(even){ background:#f7fdfd; }
+
+/* Capsule catégorie (optionnel) */
+.stocks-page .badge-cat{
+  display:inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #d7eef6;
+  background: #f0f9ff;
+  color: #116d7c;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Neutraliser le style global des forms de clients.css, mais seulement ici */
+.stocks-page form{
+  width: auto !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  display: block; /* base */
+}
+
+/* Formulaires en ligne (MAJ quantité / seuil) */
+.stocks-page .inline-form{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 12px;
+  background: #eefcfc;
+  border: 1px solid #cfe9ec;
+  border-radius: 14px;
+  width: fit-content;
+}
+
+.stocks-page .inline-form input[type="number"]{
+  width: 120px;
+  padding: 10px 12px;
+  border: 1px solid #b2d8d8;
+  border-radius: 8px;
+  font-size: 15px;
+  text-align: right;
+  background: #fff;
+}
+.stocks-page .inline-form input[type="number"]:focus{
+  outline: none;
+  border-color: #22BBD1;
+  box-shadow: 0 0 0 3px rgba(34,187,209,.15);
+}
+
+/* AVANT (trop large) : .stocks-page .inline-form button { ... }  */
+/* APRÈS : ne cible QUE la 6e colonne (MAJ quantité) */
+.stocks-page td:nth-child(6) .inline-form{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:10px; margin:0 auto; padding:12px;
+  background:#eefcfc; border:1px solid #cfe9ec; border-radius:14px; width:fit-content;
+}
+.stocks-page td:nth-child(6) .inline-form input[type="number"]{
+  width:120px; padding:10px 12px; border:1px solid #b2d8d8; border-radius:8px; background:#fff; text-align:right;
+}
+.stocks-page td:nth-child(6) .inline-form button{
+  background:#22BBD1; color:#fff; border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer;
+}
+.stocks-page td:nth-child(6) .inline-form button:hover{
+  background:#1aa8be; transform:translateY(-1px); box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+
+
+/* --- Annule le style "icônes 36px" du dernier <td> hérité de clients.css --- */
+.stocks-page table tbody tr td:last-child{
+  display: table-cell !important;
+  white-space: normal !important;
+}
+.stocks-page table tbody tr td:last-child a,
+.stocks-page table tbody tr td:last-child button{
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  border: none; /* on laisse nos propres bordures si besoin */
+}
+
+/* --- 7e colonne : plus de capsule grise autour du formulaire --- */
+.stocks-page td:nth-child(7) form{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* --- Bouton gris foncé large qui englobe tout le libellé --- */
+.stocks-page td:nth-child(7) form .btn-seuil{
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 160px !important;     /* ajuste si tu veux plus large */
+  padding: 12px 18px !important;
+  background: #6b7280 !important;   /* gris foncé */
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;   /* ne coupe pas le texte */
+}
+.stocks-page td:nth-child(7) form .btn-seuil:hover{
+  background: #4b5563 !important;
+}
+
+/* --- Variante pour ligne critique (stock <= seuil) --- */
+.stocks-page .row-critical td:nth-child(7) form .btn-seuil{
+  background: #f59e0b !important;   /* orange d’alerte */
+}
+.stocks-page .row-critical td:nth-child(7) form .btn-seuil:hover{
+  background: #d97706 !important;
+}
+
+/* (On garde la 6e colonne "MAJ quantité" telle qu’elle est en bleu) */
+
+
+/* Responsive */
+@media (max-width: 900px){
+  .stocks-page table{ font-size: 14px; }
+  .stocks-page .inline-form input[type="number"]{ width: 90px; }
+  .stocks-page thead th, .stocks-page td{ padding: 12px; }
+}
+
+
+/* 1) On fige la largeur des colonnes pour que le width soit respecté */
+.stocks-page table{
+  table-layout: fixed;          /* important pour que les width des <th>/<td> soient appliqués */
+}
+
+/* 2) Même largeur pour les colonnes 6 et 7 */
+.stocks-page th:nth-child(6),
+.stocks-page td:nth-child(6),
+.stocks-page th:nth-child(7),
+.stocks-page td:nth-child(7){
+  width: 155px;                 /* ajuste 320/340/360px selon ton goût */
+}
+
+/* 3) Centrer les contenus de ces deux colonnes */
+.stocks-page td:nth-child(6) .inline-form,
+.stocks-page td:nth-child(7) form{
+  margin: 0 auto;
+  justify-content: center;
+}
+
+/* (optionnel) Harmoniser la largeur des inputs si besoin */
+.stocks-page td:nth-child(6) .inline-form input[type="number"],
+.stocks-page td:nth-child(7) input[type="number"]{
+  width: 155px;                 /* même input de chaque côté (ajuste si nécessaire) */
+}
+
+
+

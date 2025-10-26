@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle commande - GStock</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/clients.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/commandes.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/vendeur}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" alt="Logo" class="logo">
+            <span class="app-name">GStock</span>
+        </a>
+        <nav class="nav-links">
+            <a th:href="@{/vendeur/commandes}" class="nav-link">🛒 Mes commandes</a>
+            <a th:href="@{/vendeur/commandes/nouvelle}" class="nav-link" style="text-decoration:underline;">➕ Nouvelle commande</a>
+        </nav>
+    </div>
+
+    <div class="navbar-right">
+        <div class="session-dropdown" id="sessionDropdown">
+            <div class="session-toggle" id="sessionToggle">
+                👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span> :
+                <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+            </div>
+            <div class="session-menu" id="sessionMenu">
+                <a th:href="@{/profil}" class="profil-button"><img th:src="@{/assets/img/admin.png}" class="profile-icon" alt="">Mon profil</a>
+                <a th:href="@{/logout}" class="logout-button"><img th:src="@{/assets/img/logout.png}" class="logout-icon" alt="">Déconnexion</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content" style="gap:18px;">
+
+    <!-- Alerts -->
+    <div th:if="${error} or ${success}" class="flash">
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    </div>
+
+    <h2>Créer une commande</h2>
+
+    <form th:action="@{/vendeur/commandes}" method="post" style="max-width:1000px;">
+        <!-- Client -->
+        <label for="clientId">ID client</label>
+        <input id="clientId" name="clientId" type="number" min="1" required placeholder="ex: 1">
+
+        <!-- Produits -->
+        <h3 style="color:#006b7c;margin:10px 0 0;">Produits</h3>
+        <p style="margin-top:0;color:#777;">Renseignez les quantités souhaitées (laisser 0 pour ignorer).</p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th>Prix (DH)</th>
+                <th>Stock</th>
+                <th>Quantité</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p,iter : ${produits}">
+                <td th:text="${p.id}">1</td>
+                <td th:text="${p.nom}">Produit X</td>
+                <td th:text="${p.categorie}">ENGRAIS</td>
+                <td th:text="${#numbers.formatDecimal(p.prix,1,'COMMA',2,'POINT')}">0.00</td>
+                <td th:text="${p.stockDisponible}">10</td>
+                <td>
+                    <!-- on envoie les deux listes alignées : productIds[] et quantites[] -->
+                    <input type="hidden" name="productIds" th:value="${p.id}">
+                    <input type="number" name="quantites" min="0" value="0" style="max-width:110px;">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(produits)}">
+                <td colspan="6">Aucun produit</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button type="submit" style="margin-top:12px;">Créer la commande</button>
+    </form>
+
+    <div style="text-align:center;">
+        <a th:href="@{/vendeur/commandes}">← Retour à mes commandes</a>
+    </div>
+</main>
+
+<footer class="footer">
+    <span>© GStock 2025 – Tous droits réservés</span>
+</footer>
+
+<script>
+    const dd=document.getElementById('sessionDropdown'),menu=document.getElementById('sessionMenu');let t;
+    dd.addEventListener('mouseenter',()=>{clearTimeout(t);menu.classList.add('show');menu.style.display='flex';});
+    dd.addEventListener('mouseleave',()=>{t=setTimeout(()=>{menu.classList.remove('show');menu.style.display='none';},300);});
+</script>
+</body>
+</html>

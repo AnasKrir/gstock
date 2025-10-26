@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${client.id} != null ? |Éditer client| : |Nouveau client|">Client</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/clients.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/admin}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" alt="Logo" class="logo">
+            <span class="app-name">GStock</span>
+        </a>
+        <nav class="nav-links">
+            <a th:href="@{/admin/produits}" class="nav-link">📦 Produits</a>
+            <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+            <a th:href="@{/admin/commandes}" class="nav-link">🛒 Commandes</a>
+            <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+            <a th:href="@{/admin/clients}" class="nav-link" style="text-decoration: underline;">👥 Clients</a>
+        </nav>
+    </div>
+    <div class="navbar-right">
+        <div class="session-dropdown" id="sessionDropdown">
+            <div class="session-toggle">
+                👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span> :
+                <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+            </div>
+            <div class="session-menu" id="sessionMenu">
+                <a th:href="@{/profil}" class="profil-button">
+                    <img th:src="@{/assets/img/admin.png}" alt="Profil" class="profile-icon"> Mon profil
+                </a>
+                <a th:href="@{/logout}" class="logout-button">
+                    <img th:src="@{/assets/img/logout.png}" alt="Déconnexion" class="logout-icon"> Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <h2 th:text="${client.id} != null ? |Modifier le client| : |Ajouter un client|">Client</h2>
+
+    <form th:action="@{/admin/clients/save}" th:object="${client}" method="post">
+        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+        <input type="hidden" th:if="*{id != null}" th:field="*{id}"/>
+
+        <label for="nom">Nom <span style="color:#c33;">*</span></label>
+        <input id="nom" type="text" th:field="*{nom}" required placeholder="Ex: Benali Sara"/>
+        <div class="field-error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" placeholder="email@exemple.com"/>
+        <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" type="text" th:field="*{telephone}" placeholder="06..."/>
+
+        <label for="adresse">Adresse</label>
+        <input id="adresse" type="text" th:field="*{adresse}" placeholder="Adresse complète"/>
+
+        <button type="submit">Enregistrer</button>
+    </form>
+
+    <div style="margin-top:10px; text-align:center;">
+        <a th:href="@{/admin/clients}">← Retour à la liste</a>
+    </div>
+</main>
+
+<footer class="footer">
+    <span>© GStock 2025 – Tous droits réservés</span>
+</footer>
+
+<style>
+    .field-error { color:#b30000; font-size: 0.9rem; margin: 4px 0 10px; }
+    .alert { padding: 10px; border-radius: 6px; margin: 10px 0; }
+    .alert--success { background: #e7f7ed; border: 1px solid #b6e2c5; }
+    .alert--error   { background: #fdeceb; border: 1px solid #f3b4b0; }
+</style>
+
+<script>
+    const dropdown = document.getElementById('sessionDropdown');
+    const menu = document.getElementById('sessionMenu');
+    let timeout;
+    dropdown.addEventListener('mouseenter', () => { clearTimeout(timeout); menu.classList.add('show'); menu.style.display='flex'; });
+    dropdown.addEventListener('mouseleave', () => { timeout=setTimeout(()=>{ menu.classList.remove('show'); menu.style.display='none'; },300); });
+</script>
+</body>
+</html>

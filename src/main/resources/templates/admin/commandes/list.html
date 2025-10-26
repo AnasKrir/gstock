@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Commandes - GStock</title>
+  <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/commandes.css}">
+</head>
+<body>
+<header class="navbar">
+  <div class="navbar-left">
+    <a th:href="@{/admin}" class="home-link">
+      <img th:src="@{/assets/img/logo.png}" class="logo" alt="Logo">
+      <span class="app-name">GStock</span>
+    </a>
+    <nav class="nav-links">
+      <a th:href="@{/admin/produits}" class="nav-link">📦 Produits</a>
+      <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+      <a th:href="@{/admin/commandes}" class="nav-link" style="text-decoration: underline;">🛒 Commandes</a>
+      <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+      <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+    </nav>
+  </div>
+  <div class="navbar-right">
+    <div class="session-dropdown" id="sessionDropdown">
+      <div class="session-toggle" id="sessionToggle">
+        👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span>:
+        <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+      </div>
+      <div class="session-menu" id="sessionMenu">
+        <a th:href="@{/profil}" class="profil-button">
+          <img th:src="@{/assets/img/admin.png}" alt="Profil" class="profile-icon">
+          Mon profil
+        </a>
+        <a th:href="@{/logout}" class="logout-button">
+          <img th:src="@{/assets/img/logout.png}" alt="Déconnexion" class="logout-icon">
+          Déconnexion
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <!-- Alerts -->
+  <div th:if="${error} or ${success}" class="flash">
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  </div>
+
+  <div class="list-header">
+    <h2>Liste des commandes</h2>
+    <a class="btn primary" th:href="@{/admin/commandes/nouvelle}">➕ Nouvelle commande</a>
+  </div>
+
+  <form class="search" th:action="@{/admin/commandes}" method="get">
+    <input type="text" name="q" th:value="${q}" placeholder="Rechercher (client, id)…">
+    <button class="btn" type="submit">Rechercher</button>
+  </form>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>#</th><th>Date</th><th>Client</th><th>Vendeur</th>
+      <th>Total</th><th>Statut</th><th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${commandes}">
+      <td th:text="${c.id}">1</td>
+      <td th:text="${#temporals.format(c.dateCreation, 'dd/MM/yyyy HH:mm')}">01/01/2025</td>
+      <td th:text="${c.client.nom}">Client</td>
+      <td th:text="${c.vendeur.username}">vendeur</td>
+      <td><span th:text="${#numbers.formatDecimal(c.total,1,'COMMA',2,'POINT')} + ' DH'">0.00 DH</span></td>
+      <td>
+        <span class="badge" th:classappend="${'badge--' + c.statut} "
+              th:text="${c.statut}">EN_ATTENTE</span>
+      </td>
+      <td class="actions">
+        <!-- Afficher les actions UNIQUEMENT quand la commande est EN_ATTENTE -->
+        <div th:if="${c.statut == T(ma.gstock.entities.enums.StatutCommande).EN_ATTENTE}">
+          <form th:action="@{'/admin/commandes/' + ${c.id} + '/valider'}" method="post" style="display:inline">
+            <button class="btn success" type="submit"
+                    onclick="return confirm('Valider cette commande ?')">✅</button>
+          </form>
+
+          <form th:action="@{'/admin/commandes/' + ${c.id} + '/annuler'}" method="post" style="display:inline">
+            <button class="btn danger" type="submit"
+                    onclick="return confirm('Annuler cette commande ?')">❌</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+<footer class="footer"><span>© GStock 2025</span></footer>
+
+<script>
+  const dropdown = document.getElementById('sessionDropdown');
+  const menu = document.getElementById('sessionMenu');
+  let timeout;
+
+  dropdown.addEventListener('mouseenter', () => {
+      clearTimeout(timeout);
+      menu.classList.add('show');
+      menu.style.display = 'flex';
+  });
+
+  dropdown.addEventListener('mouseleave', () => {
+      timeout = setTimeout(() => {
+          menu.classList.remove('show');
+          menu.style.display = 'none';
+      }, 300);
+  });
+</script>
+</body>
+</html>

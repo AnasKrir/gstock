@@ -1,0 +1,54 @@
+<!-- src/main/resources/templates/profil.html -->
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon profil - GStock</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/profil.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" alt="Logo" class="logo">
+            <span class="app-name">GStock</span>
+        </a>
+    </div>
+    <div class="navbar-right">
+        <a th:href="@{/logout}" class="logout-button">
+            <img th:src="@{/assets/img/logout.png}" class="logout-icon" alt=""> Déconnexion
+        </a>
+    </div>
+</header>
+
+<main class="main-content">
+    <h2>Mon profil</h2>
+
+    <div class="profile-wrap">
+        <div class="profile-card">
+            <p><b>Username :</b> <span th:text="${me.username}">user</span></p>
+            <p><b>Rôle :</b> <span th:text="${me.role}">ROLE</span></p>
+        </div>
+
+        <div class="password-card">
+            <h3>Changer mon mot de passe</h3>
+
+            <p th:if="${error}"   th:text="${error}"   class="err"></p>
+            <p th:if="${success}" th:text="${success}" class="ok"></p>
+
+            <form th:action="@{/profil/password}" method="post">
+                <input type="password" name="currentPassword" placeholder="Mot de passe actuel" required>
+                <input type="password" name="newPassword"     placeholder="Nouveau mot de passe" required>
+                <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" required>
+                <button type="submit">Mettre à jour</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <span>© GStock 2025 – Tous droits réservés</span>
+</footer>
+</body>
+</html>

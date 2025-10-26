@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Produits - GStock</title>
+  <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/produits.css}">
+</head>
+<body>
+<header class="navbar">
+  <div class="navbar-left">
+    <a th:href="@{/admin}" class="home-link">
+      <img th:src="@{/assets/img/logo.png}" class="logo" alt="Logo">
+      <span class="app-name">GStock</span>
+    </a>
+    <nav class="nav-links">
+      <a th:href="@{/admin/produits}" class="nav-link" style="text-decoration: underline;">📦 Produits</a>
+      <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+      <a th:href="@{/admin/commandes}" class="nav-link">🛒 Commandes</a>
+      <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+      <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+    </nav>
+  </div>
+  <div class="navbar-right">
+    <div class="session-dropdown" id="sessionDropdown">
+      <div class="session-toggle" id="sessionToggle">
+        👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span>:
+        <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+      </div>
+      <div class="session-menu" id="sessionMenu">
+        <a th:href="@{/profil}" class="profil-button">
+          <img th:src="@{/assets/img/admin.png}" alt="Profil" class="profile-icon">
+          Mon profil
+        </a>
+        <a th:href="@{/logout}" class="logout-button">
+          <img th:src="@{/assets/img/logout.png}" alt="Déconnexion" class="logout-icon">
+          Déconnexion
+        </a>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<main class="main-content">
+  <div class="list-header">
+    <h2>Produits</h2>
+    <a class="btn primary" th:href="@{/admin/produits/nouveau}">➕ Nouveau</a>
+  </div>
+
+  <div class="topbar" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;">
+    <form th:action="@{/admin/produits}" method="get" style="display:flex;gap:8px;align-items:center;">
+      <!-- Sélecteur de catégorie -->
+      <select name="cat">
+        <option value="" th:selected="${cat} == null">Toutes les catégories</option>
+        <option th:each="c : ${categories}"
+                th:value="${c}"
+                th:text="${c}"
+                th:selected="${cat} == ${c}"></option>
+      </select>
+
+      <!-- Recherche par nom (si tu l’as déjà, garde ton input existant) -->
+      <input type="text" name="q" th:value="${q}" placeholder="Nom contient…"/>
+
+      <button class="btn" type="submit">Filtrer</button>
+      <a class="btn" th:href="@{/admin/produits}">Réinitialiser</a>
+    </form>
+
+  </div>
+
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>#</th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Seuil</th><th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${produits}">
+      <td th:text="${p.id}">1</td>
+      <td th:text="${p.nom}">Nom</td>
+      <td>
+        <a th:href="@{/admin/produits(cat=${p.categorie})}"
+           th:text="${p.categorie}">CATEGORIE</a>
+      </td>
+      <td th:text="${#numbers.formatDecimal(p.prix,1,'COMMA',2,'POINT')} + ' DH'">0.00 DH</td>
+      <td th:text="${p.stockDisponible}">0</td>
+      <td th:text="${p.seuilAlerte}">0</td>
+      <td class="actions">
+        <a class="btn" th:href="@{'/admin/produits/' + ${p.id} + '/edit'}">✏️</a>
+        <a class="btn danger" th:href="@{'/admin/produits/' + ${p.id} + '/delete'}"
+           onclick="return confirm('Supprimer ce produit ?')">🗑️</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+<footer class="footer"><span>© GStock 2025</span></footer>
+
+<script>
+  const dropdown = document.getElementById('sessionDropdown');
+  const menu = document.getElementById('sessionMenu');
+  let timeout;
+
+  dropdown.addEventListener('mouseenter', () => {
+      clearTimeout(timeout);
+      menu.classList.add('show');
+      menu.style.display = 'flex';
+  });
+
+  dropdown.addEventListener('mouseleave', () => {
+      timeout = setTimeout(() => {
+          menu.classList.remove('show');
+          menu.style.display = 'none';
+      }, 300);
+  });
+</script>
+
+</body>
+</html>

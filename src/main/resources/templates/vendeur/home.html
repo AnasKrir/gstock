@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil Vendeur - GStock</title>
+  <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/clients.css}">
+</head>
+<body>
+<header class="navbar">
+  <div class="navbar-left">
+    <a th:href="@{/vendeur}" class="home-link">
+      <img th:src="@{/assets/img/logo.png}" alt="Logo" class="logo">
+      <span class="app-name">GStock</span>
+    </a>
+    <nav class="nav-links">
+      <a th:href="@{/vendeur/commandes}" class="nav-link">🛒 Mes commandes</a>
+      <a th:href="@{/vendeur/commandes/nouvelle}" class="nav-link">➕ Nouvelle commande</a>
+    </nav>
+  </div>
+
+  <div class="navbar-right">
+    <div class="session-dropdown" id="sessionDropdown">
+      <div class="session-toggle" id="sessionToggle">
+        👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span> :
+        <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+      </div>
+      <div class="session-menu" id="sessionMenu">
+        <a th:href="@{/profil}" class="profil-button">
+          <img th:src="@{/assets/img/admin.png}" class="profile-icon" alt=""> Mon profil
+        </a>
+        <a th:href="@{/logout}" class="logout-button">
+          <img th:src="@{/assets/img/logout.png}" class="logout-icon" alt=""> Déconnexion
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content" style="gap:20px;">
+  <h2>Bienvenue</h2>
+  <div class="welcome-box" style="padding:35px 50px;">
+    <p>👋 Bonjour <b sec:authentication="name">vendeur</b>, utilisez les liens ci-dessus pour
+      <a th:href="@{/vendeur/commandes/nouvelle}">créer une nouvelle commande</a> ou
+      <a th:href="@{/vendeur/commandes}">consulter vos commandes</a>.
+    </p>
+  </div>
+</main>
+
+<footer class="footer">
+  <span>© GStock 2025 – Tous droits réservés</span>
+</footer>
+
+<script>
+  const dd = document.getElementById('sessionDropdown'), menu = document.getElementById('sessionMenu');
+  let t; dd.addEventListener('mouseenter', ()=>{clearTimeout(t); menu.classList.add('show'); menu.style.display='flex';});
+  dd.addEventListener('mouseleave', ()=>{t=setTimeout(()=>{menu.classList.remove('show'); menu.style.display='none';},300);});
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil Admin - GStock</title>
+    <link rel="stylesheet" th:href="@{/assets/css/home.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-left">
+        <a th:href="@{/admin}" class="home-link">
+            <img th:src="@{/assets/img/logo.png}" alt="Logo" class="logo">
+            <span class="app-name">GStock</span>
+        </a>
+
+        <nav class="nav-links">
+            <a th:href="@{/admin/produits}" class="nav-link">📦 Produits</a>
+            <a th:href="@{/admin/stocks}" class="nav-link">📊 Stocks</a>
+            <a th:href="@{/admin/commandes}" class="nav-link">🛒 Commandes</a>
+            <a th:href="@{/admin/rapports}" class="nav-link">📑 Rapports</a>
+            <a th:href="@{/admin/clients}" class="nav-link" >👥 Clients</a>
+        </nav>
+    </div>
+
+    <div class="navbar-right">
+        <div class="session-dropdown" id="sessionDropdown">
+            <div class="session-toggle" id="sessionToggle">
+                👤 <span class="role" sec:authentication="principal.authorities">[ROLE]</span>:
+                <span class="name" sec:authentication="name">[USERNAME] ▼</span>
+            </div>
+            <div class="session-menu" id="sessionMenu">
+                <a th:href="@{/profil}" class="profil-button">
+                    <img th:src="@{/assets/img/admin.png}" alt="Profil" class="profile-icon">
+                    Mon profil
+                </a>
+                <a th:href="@{/logout}" class="logout-button">
+                    <img th:src="@{/assets/img/logout.png}" alt="Déconnexion" class="logout-icon">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content" style="flex-direction: column; gap: 30px; padding: 20px;">
+    <h2 style="text-align:center; color:#006b7c;">Tableau de Bord Administrateur</h2>
+
+    <!-- Statistiques principales -->
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+        <div class="welcome-box" style="background-color: #2196F3;">
+            Produits <h3 th:text="${totalProduits}">0</h3>
+        </div>
+        <div class="welcome-box" style="background-color: #FF9800;">
+            Commandes <h3 th:text="${totalCommandes}">0</h3>
+        </div>
+        <div class="welcome-box" style="background-color: #4CAF50;">
+            Stocks Sains <h3 th:text="${stocksNormaux}">0</h3>
+        </div>
+        <div class="welcome-box" style="background-color: #F44336;">
+            Stocks Bas/Alerte <h3 th:text="${stocksCritiques}">0</h3>
+        </div>
+    </div>
+
+    <!-- Section montant / valeur stock -->
+    <div style="text-align:center;">
+        <h3>Valeur Totale du Stock</h3>
+        <p style="font-size: 24px; color: green;">
+            <span th:if="${valeurStock != null}" th:text="${#numbers.formatDecimal(valeurStock, 1, 'COMMA', 2, 'POINT')} + ' DH'">0.00 DH</span>
+            <span th:unless="${valeurStock != null}">0.00 DH</span>
+        </p>
+    </div>
+
+    <!-- Derniers produits ajoutés -->
+    <div style="width: 90%; margin: auto;">
+        <h3>Derniers Produits Ajoutés</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: #cee9e9;">
+            <tr>
+                <th>ID</th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Seuil Alerte</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${dernierProduits}"
+                th:classappend="${p.stockDisponible != null and p.seuilAlerte != null and p.stockDisponible <= p.seuilAlerte} ? 'row-critical' : ''"
+                style="text-align:center;">
+            <td style="border: 1px solid #ccc; padding: 8px;" th:text="${p.id}">1</td>
+                <td style="border: 1px solid #ccc; padding: 8px;" th:text="${p.nom}">Produit X</td>
+                <td style="border: 1px solid #ccc; padding: 8px;" th:text="${p.categorie}">ENGRAIS</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">
+                    <span th:text="${#numbers.formatDecimal(p.prix, 1, 'COMMA', 2, 'POINT')} + ' DH'">0.00 DH</span>
+                </td>
+                <td style="border: 1px solid #ccc; padding: 8px;" th:text="${p.stockDisponible}">20</td>
+                <td style="border: 1px solid #ccc; padding: 8px;" th:text="${p.seuilAlerte}">5</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer class="footer">
+    <span>© GStock 2025 – Tous droits réservés</span>
+</footer>
+
+<script>
+    const dropdown = document.getElementById('sessionDropdown');
+    const menu = document.getElementById('sessionMenu');
+    let timeout;
+
+    dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(timeout);
+        menu.classList.add('show');
+        menu.style.display = 'flex';
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+            menu.classList.remove('show');
+            menu.style.display = 'none';
+        }, 300);
+    });
+</script>
+</body>
+</html>
