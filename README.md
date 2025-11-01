@@ -3,6 +3,7 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.x-brightgreen)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Status](https://img.shields.io/badge/Deploy-Online-success)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 
 Application web **Spring Boot + Thymeleaf** pour gérer produits, clients, commandes et stocks, avec rôles **Admin** et **Vendeur**, authentification sécurisée et **déploiement cloud (PostgreSQL/Neon + Render)**.
