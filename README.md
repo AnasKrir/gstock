@@ -102,8 +102,8 @@ Créer : `src/main/resources/application-dev.properties`
 ```properties
 # --- MySQL local ---
 spring.datasource.url=jdbc:mysql://localhost:3306/gestion_stock?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-spring.datasource.username=xxxx
-spring.datasource.password=xxxx
+spring.datasource.username=GS_User
+spring.datasource.password=Manager
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 # --- JPA/Hibernate ---
